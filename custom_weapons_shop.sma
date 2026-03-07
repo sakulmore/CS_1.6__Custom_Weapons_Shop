@@ -4,7 +4,7 @@
 #include <cstrike>
 
 #define PLUGIN_NAME    "Custom Weapons Shop"
-#define PLUGIN_VERSION "1.0"
+#define PLUGIN_VERSION "1.1"
 #define PLUGIN_AUTHOR  "sakulmore"
 
 new Trie:g_tWeaponNames;
@@ -16,6 +16,7 @@ enum _:ItemData {
     Item_Wep2[32],
     Item_Wep3[32],
     Item_Sound[64],
+    Item_Team,
     Item_Flag,
     Item_VipText[32]
 }
@@ -107,12 +108,13 @@ EnsureConfigsExist()
             fprintf(fp, "; Custom Weapons Config File%c", 10);
             fprintf(fp, "; Example:%c", 10);
             fprintf(fp, ";%c", 10);
-            fprintf(fp, "; %c<weapon1>%c %c<weapon2>%c %c<weapon3>%c %c<sound>%c %c<admin_flag>%c %c<vip_text>%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "; %c<weapon1>%c %c<weapon2>%c %c<weapon3>%c %c<sound>%c %c<team>%c %c<admin_flag>%c %c<vip_text>%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
             fprintf(fp, ";%c", 10);
             fprintf(fp, "; The value %cnone%c can be used for: %cweapon2%c, %cweapon3%c, %csound%c, %cadmin_flag%c, %cvip_text%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "; Teams available: %ct%c, %cct%c, %cboth%c%c", 34, 34, 34, 34, 34, 34, 10);
             
-            fprintf(fp, "%cweapon_m4a1%c %cweapon_deagle%c %cweapon_hegrenade%c %cnone%c %cnone%c %cnone%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
-            fprintf(fp, "%cweapon_awp%c %cweapon_deagle%c %cnone%c %cnone%c %ct%c %cVIP%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "%cweapon_m4a1%c %cweapon_deagle%c %cweapon_hegrenade%c %cnone%c %cboth%c %cnone%c %cnone%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "%cweapon_awp%c %cweapon_deagle%c %cnone%c %cnone%c %ct%c %ct%c %cVIP%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
             
             fclose(fp);
         }
@@ -209,7 +211,7 @@ LoadCustomWeapons()
     if (!fp) return;
 
     new szLine[256];
-    new szWep1[32], szWep2[32], szWep3[32], szSound[64], szFlag[32], szVip[32];
+    new szWep1[32], szWep2[32], szWep3[32], szSound[64], szTeam[16], szFlag[32], szVip[32];
     new itemData[ItemData];
 
     while (!feof(fp))
@@ -220,13 +222,14 @@ LoadCustomWeapons()
         if (!szLine[0] || szLine[0] == ';') continue;
 
         szWep1[0] = '^0'; szWep2[0] = '^0'; szWep3[0] = '^0'; 
-        szSound[0] = '^0'; szFlag[0] = '^0'; szVip[0] = '^0';
+        szSound[0] = '^0'; szTeam[0] = '^0'; szFlag[0] = '^0'; szVip[0] = '^0';
 
         parse(szLine, 
             szWep1, charsmax(szWep1), 
             szWep2, charsmax(szWep2), 
             szWep3, charsmax(szWep3), 
             szSound, charsmax(szSound), 
+            szTeam, charsmax(szTeam),
             szFlag, charsmax(szFlag), 
             szVip, charsmax(szVip));
 
@@ -259,6 +262,10 @@ LoadCustomWeapons()
         {
             itemData[Item_Sound][0] = '^0';
         }
+
+        if (equali(szTeam, "t")) itemData[Item_Team] = 1;
+        else if (equali(szTeam, "ct")) itemData[Item_Team] = 2;
+        else itemData[Item_Team] = 0;
 
         if (equali(szFlag, "none") || !szFlag[0])
         {
@@ -324,10 +331,17 @@ public CmdShowMenu(id)
     new menu = menu_create("\yCustom Weapons Shop", "Menu_Handler");
     new itemData[ItemData];
     new szDisplay[128], szName[64];
+    
+    new userTeam = _:cs_get_user_team(id);
 
     for (new i = 0; i < count; i++)
     {
         ArrayGetArray(g_aMenuItems, i, itemData);
+        
+        if (itemData[Item_Team] != 0 && itemData[Item_Team] != userTeam)
+        {
+            continue;
+        }
         
         szDisplay[0] = '^0';
 
@@ -385,6 +399,13 @@ public Menu_Handler(id, menu, item)
     new itemData[ItemData];
     ArrayGetArray(g_aMenuItems, index, itemData);
     menu_destroy(menu);
+
+    new userTeam = _:cs_get_user_team(id);
+    if (itemData[Item_Team] != 0 && itemData[Item_Team] != userTeam)
+    {
+        client_print(id, print_chat, "[Custom Weapons Shop] This item is not available for your team.");
+        return PLUGIN_HANDLED;
+    }
 
     if (itemData[Item_Flag] != 0 && !(get_user_flags(id) & itemData[Item_Flag]))
     {

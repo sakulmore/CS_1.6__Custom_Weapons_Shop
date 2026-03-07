@@ -15,7 +15,7 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 `/customweapons` - Opens the main menu.
 
 # Format
-\"\<weapon1\>\" \"\<weapon2\>\" \"\<weapon3\>\" \"\<sound\>\" \"\<admin_flag\>\" \"\<vip_text\>\"
+\"\<weapon1\>\" \"\<weapon2\>\" \"\<weapon3\>\" \"\<sound\>\" \"\<team\>\" \"\<admin_flag\>\" \"\<vip_text\>\"
 - Make sure you have entered the exact name of the sound file in `sound`. Example: ... \<woohoo\> <- the file name must be `woohoo.wav`.
 
 # Default Config Files:
@@ -97,8 +97,9 @@ weapon_p90 = 250
 ; "<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<admin_flag>" "<vip_text>"
 ;
 ; The value "none" can be used for: "weapon2", "weapon3", "sound", "admin_flag", "vip_text"
-"weapon_m4a1" "weapon_deagle" "weapon_hegrenade" "none" "none" "none"
-"weapon_awp" "weapon_deagle" "none" "none" "t" "VIP"
+; Teams available: "t", "ct", "both"
+"weapon_m4a1" "weapon_deagle" "weapon_hegrenade" "none" "both" "none" "none"
+"weapon_awp" "weapon_deagle" "none" "none" "t" "t" "VIP"
 ```
 
 # Showcases
