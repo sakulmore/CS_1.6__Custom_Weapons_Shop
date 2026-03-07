@@ -22,7 +22,8 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 - When first launched, the plugin creates three files in the `../data` folder: weaponnames.cfg, custom_weapons_ammo.cfg, and custom_weapons.cfg.
 
 ## weaponnames.cfg
-```; You can customize the names of weapons to suit your preferences.
+```
+; You can customize the names of weapons to suit your preferences.
 weapon_p228 = P228
 weapon_shield = Shield
 weapon_scout = Scout
@@ -51,10 +52,12 @@ weapon_flashbang = Flashbang
 weapon_deagle = Desert Eagle
 weapon_sg552 = Sig 552
 weapon_ak47 = AK-47
-weapon_p90 = P-90```
+weapon_p90 = P-90
+```
 
 ## custom_weapons_ammo.cfg
-```; You can customize the backpack ammo for given weapons.
+```
+; You can customize the backpack ammo for given weapons.
 weapon_p228 = 250
 weapon_shield = 250
 weapon_scout = 250
@@ -82,17 +85,20 @@ weapon_flashbang = 5
 weapon_deagle = 250
 weapon_sg552 = 250
 weapon_ak47 = 250
-weapon_p90 = 250```
+weapon_p90 = 250
+```
 
 ## custom_weapons.cfg
-```; Custom Weapons Config File
+```
+; Custom Weapons Config File
 ; Example:
 ;
 ; "<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<admin_flag>" "<vip_text>"
 ;
 ; The value "none" can be used for: "weapon2", "weapon3", "sound", "admin_flag", "vip_text"
 "weapon_m4a1" "weapon_deagle" "weapon_hegrenade" "none" "none" "none"
-"weapon_awp" "weapon_deagle" "none" "none" "t" "VIP"```
+"weapon_awp" "weapon_deagle" "none" "none" "t" "VIP"
+```
 
 # Showcases
 To be added later...
