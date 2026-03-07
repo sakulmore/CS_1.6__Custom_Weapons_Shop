@@ -87,6 +87,7 @@ weapon_sg552 = 250
 weapon_ak47 = 250
 weapon_p90 = 250
 ```
+- Ammo for C4 is not on the list because it would not make sense. There is always only one C4.
 
 ## custom_weapons.cfg
 ```
