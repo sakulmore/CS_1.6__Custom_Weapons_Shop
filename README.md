@@ -14,6 +14,9 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 `/cws` - Opens the main menu.
 `/customweapons` - Opens the main menu.
 
+# Console Commands
+`cws_menu` - Opens the main menu.
+
 # Format
 `"<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<team>" "<admin_flag>" "<vip_text>"`
 - Make sure you have entered the exact name of the sound file in `sound`. Example: ... \<woohoo\> <- the file name must be `woohoo.wav`.
