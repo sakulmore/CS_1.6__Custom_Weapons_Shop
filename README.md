@@ -1,5 +1,6 @@
 # CS 1.6 - Custom Weapons Shop
 A plugin that allows you to create your own Weapon Shop.
+
 The plugin is fully customizable! You can change weapon names, adjust ammo for each weapon separately, and create your own weapon sets.
 
 # Installation
@@ -12,6 +13,7 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 
 # Chat Commands
 `/cws` - Opens the main menu.
+
 `/customweapons` - Opens the main menu.
 
 # Console Commands
