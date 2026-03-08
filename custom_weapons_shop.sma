@@ -4,7 +4,7 @@
 #include <cstrike>
 
 #define PLUGIN_NAME    "Custom Weapons Shop"
-#define PLUGIN_VERSION "1.1"
+#define PLUGIN_VERSION "1.2"
 #define PLUGIN_AUTHOR  "sakulmore"
 
 new Trie:g_tWeaponNames;
@@ -50,6 +50,8 @@ public plugin_init()
 
     register_clcmd("say /cws", "CmdShowMenu");
     register_clcmd("say /customweapons", "CmdShowMenu");
+    
+    register_concmd("cws_menu", "CmdShowMenu");
 }
 
 public plugin_end()
@@ -170,7 +172,7 @@ LoadWeaponNames()
         fgets(fp, szLine, charsmax(szLine));
         trim(szLine);
 
-        if (!szLine[0] || szLine[0] == ';') continue;
+        if (!szLine[0] || szLine[0] == ';' || szLine[0] == '#') continue;
 
         if (strtok(szLine, szKey, charsmax(szKey), szVal, charsmax(szVal), '='))
         {
@@ -193,7 +195,7 @@ LoadWeaponAmmo()
         fgets(fp, szLine, charsmax(szLine));
         trim(szLine);
 
-        if (!szLine[0] || szLine[0] == ';') continue;
+        if (!szLine[0] || szLine[0] == ';' || szLine[0] == '#') continue;
 
         if (strtok(szLine, szKey, charsmax(szKey), szVal, charsmax(szVal), '='))
         {
@@ -219,7 +221,7 @@ LoadCustomWeapons()
         fgets(fp, szLine, charsmax(szLine));
         trim(szLine);
 
-        if (!szLine[0] || szLine[0] == ';') continue;
+        if (!szLine[0] || szLine[0] == ';' || szLine[0] == '#') continue;
 
         szWep1[0] = '^0'; szWep2[0] = '^0'; szWep3[0] = '^0'; 
         szSound[0] = '^0'; szTeam[0] = '^0'; szFlag[0] = '^0'; szVip[0] = '^0';
@@ -315,6 +317,12 @@ ApplyWeaponAmmo(id, const szWeapon[])
 
 public CmdShowMenu(id)
 {
+    if (id == 0)
+    {
+        server_print("[Custom Weapons Shop] You can only use this command in the game.");
+        return PLUGIN_HANDLED;
+    }
+
     if (!is_user_alive(id))
     {
         client_print(id, print_chat, "[Custom Weapons Shop] You must be alive to use this.");
