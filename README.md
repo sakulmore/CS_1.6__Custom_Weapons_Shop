@@ -11,13 +11,12 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 # Requirements
 - AMX Mod X 1.10
 
-# Chat Commands
-`/cws` - Opens the main menu.
-
-`/customweapons` - Opens the main menu.
-
-# Console Commands
-`cws_menu` - Opens the main menu.
+# Commands
+| Command | Chat or Console? | Description |
+| - | - | - |
+| /cws | Chat | Open the main menu. |
+| /customweapons | Chat | Opens the main menu. |
+| cws_menu | Console | Opens the main menu. |
 
 # Format
 `"<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<team>" "<admin_flag>" "<vip_text>"`
