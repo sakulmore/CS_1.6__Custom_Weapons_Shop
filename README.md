@@ -14,7 +14,7 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 # Commands
 | Command | Chat or Console? | Description |
 | - | - | - |
-| /cws | Chat | Open the main menu. |
+| /cws | Chat | Opens the main menu. |
 | /customweapons | Chat | Opens the main menu. |
 | cws_menu | Console | Opens the main menu. |
 
