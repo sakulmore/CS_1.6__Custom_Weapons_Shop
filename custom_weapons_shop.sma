@@ -4,7 +4,7 @@
 #include <cstrike>
 
 #define PLUGIN_NAME    "Custom Weapons Shop"
-#define PLUGIN_VERSION "1.2"
+#define PLUGIN_VERSION "1.3"
 #define PLUGIN_AUTHOR  "sakulmore"
 
 new Trie:g_tWeaponNames;
@@ -18,7 +18,8 @@ enum _:ItemData {
     Item_Sound[64],
     Item_Team,
     Item_Flag,
-    Item_VipText[32]
+    Item_VipText[32],
+    Item_Cost
 }
 
 new g_szNamesCfg[256];
@@ -110,13 +111,13 @@ EnsureConfigsExist()
             fprintf(fp, "; Custom Weapons Config File%c", 10);
             fprintf(fp, "; Example:%c", 10);
             fprintf(fp, ";%c", 10);
-            fprintf(fp, "; %c<weapon1>%c %c<weapon2>%c %c<weapon3>%c %c<sound>%c %c<team>%c %c<admin_flag>%c %c<vip_text>%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "; %c<weapon1>%c %c<weapon2>%c %c<weapon3>%c %c<sound>%c %c<team>%c %c<admin_flag>%c %c<vip_text>%c %c<money>%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
             fprintf(fp, ";%c", 10);
-            fprintf(fp, "; The value %cnone%c can be used for: %cweapon2%c, %cweapon3%c, %csound%c, %cadmin_flag%c, %cvip_text%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "; The value %cnone%c can be used for: %cweapon2%c, %cweapon3%c, %csound%c, %cadmin_flag%c, %cvip_text%c, %cmoney%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
             fprintf(fp, "; Teams available: %ct%c, %cct%c, %cboth%c%c", 34, 34, 34, 34, 34, 34, 10);
             
-            fprintf(fp, "%cweapon_m4a1%c %cweapon_deagle%c %cweapon_hegrenade%c %cnone%c %cboth%c %cnone%c %cnone%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
-            fprintf(fp, "%cweapon_awp%c %cweapon_deagle%c %cnone%c %cnone%c %ct%c %ct%c %cVIP%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "%cweapon_m4a1%c %cweapon_deagle%c %cweapon_hegrenade%c %cnone%c %cboth%c %cnone%c %cnone%c %c5400%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
+            fprintf(fp, "%cweapon_awp%c %cweapon_deagle%c %cnone%c %cnone%c %ct%c %ct%c %cVIP%c %cnone%c%c", 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 10);
             
             fclose(fp);
         }
@@ -213,7 +214,7 @@ LoadCustomWeapons()
     if (!fp) return;
 
     new szLine[256];
-    new szWep1[32], szWep2[32], szWep3[32], szSound[64], szTeam[16], szFlag[32], szVip[32];
+    new szWep1[32], szWep2[32], szWep3[32], szSound[64], szTeam[16], szFlag[32], szVip[32], szMoney[16];
     new itemData[ItemData];
 
     while (!feof(fp))
@@ -224,7 +225,7 @@ LoadCustomWeapons()
         if (!szLine[0] || szLine[0] == ';' || szLine[0] == '#') continue;
 
         szWep1[0] = '^0'; szWep2[0] = '^0'; szWep3[0] = '^0'; 
-        szSound[0] = '^0'; szTeam[0] = '^0'; szFlag[0] = '^0'; szVip[0] = '^0';
+        szSound[0] = '^0'; szTeam[0] = '^0'; szFlag[0] = '^0'; szVip[0] = '^0'; szMoney[0] = '^0';
 
         parse(szLine, 
             szWep1, charsmax(szWep1), 
@@ -233,7 +234,8 @@ LoadCustomWeapons()
             szSound, charsmax(szSound), 
             szTeam, charsmax(szTeam),
             szFlag, charsmax(szFlag), 
-            szVip, charsmax(szVip));
+            szVip, charsmax(szVip),
+            szMoney, charsmax(szMoney));
 
         if (!szWep1[0] || equali(szWep1, "none")) continue;
 
@@ -285,6 +287,15 @@ LoadCustomWeapons()
         else
         {
             itemData[Item_VipText][0] = '^0';
+        }
+
+        if (!szMoney[0] || equali(szMoney, "none"))
+        {
+            itemData[Item_Cost] = 0;
+        }
+        else
+        {
+            itemData[Item_Cost] = str_to_num(szMoney);
         }
 
         ArrayPushArray(g_aMenuItems, itemData);
@@ -373,6 +384,15 @@ public CmdShowMenu(id)
             format(szDisplay, charsmax(szDisplay), "%s \y[%s]\w", szDisplay, itemData[Item_VipText]);
         }
 
+        if (itemData[Item_Cost] <= 0)
+        {
+            format(szDisplay, charsmax(szDisplay), "%s \y[FREE]", szDisplay);
+        }
+        else
+        {
+            format(szDisplay, charsmax(szDisplay), "%s \y[\r$ %d\y]", szDisplay, itemData[Item_Cost]);
+        }
+
         new szNum[8];
         num_to_str(i, szNum, charsmax(szNum));
 
@@ -419,6 +439,19 @@ public Menu_Handler(id, menu, item)
     {
         client_print(id, print_chat, "[Custom Weapons Shop] You do not have access to this item.");
         return PLUGIN_HANDLED;
+    }
+
+    new cost = itemData[Item_Cost];
+    if (cost > 0)
+    {
+        new userMoney = cs_get_user_money(id);
+        if (userMoney < cost)
+        {
+            client_print(id, print_chat, "[Custom Weapons Shop] You don't have enough money.");
+            return PLUGIN_HANDLED;
+        }
+        
+        cs_set_user_money(id, userMoney - cost);
     }
 
     strip_user_weapons(id);

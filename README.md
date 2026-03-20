@@ -19,7 +19,7 @@ The plugin is fully customizable! You can change weapon names, adjust ammo for e
 | cws_menu | Console | Opens the main menu. |
 
 # Format
-`"<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<team>" "<admin_flag>" "<vip_text>"`
+`"<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<team>" "<admin_flag>" "<vip_text>" "<money>"`
 - Make sure you have entered the exact name of the sound file in `sound`. Example: ... \<woohoo\> <- the file name must be `woohoo.wav`.
 
 # Default Config Files:
@@ -98,12 +98,12 @@ weapon_p90 = 250
 ; Custom Weapons Config File
 ; Example:
 ;
-; "<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<admin_flag>" "<vip_text>"
+; "<weapon1>" "<weapon2>" "<weapon3>" "<sound>" "<team>" "<admin_flag>" "<vip_text>" "<money>"
 ;
-; The value "none" can be used for: "weapon2", "weapon3", "sound", "admin_flag", "vip_text"
+; The value "none" can be used for: "weapon2", "weapon3", "sound", "admin_flag", "vip_text", "money"
 ; Teams available: "t", "ct", "both"
-"weapon_m4a1" "weapon_deagle" "weapon_hegrenade" "none" "both" "none" "none"
-"weapon_awp" "weapon_deagle" "none" "none" "t" "t" "VIP"
+"weapon_m4a1" "weapon_deagle" "weapon_hegrenade" "none" "both" "none" "none" "5400"
+"weapon_awp" "weapon_deagle" "none" "none" "t" "t" "VIP" "none"
 ```
 
 # Showcases
